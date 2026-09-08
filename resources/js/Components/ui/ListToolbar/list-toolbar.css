@@ -1,0 +1,316 @@
+.list-toolbar-card {
+  @apply overflow-hidden rounded-2xl border border-neutral-200/80 bg-white shadow-[0_2px_16px_rgba(0,0,0,0.05)];
+}
+
+.list-toolbar-row {
+  @apply flex h-9 min-h-9 items-center gap-2;
+}
+
+.list-toolbar-section {
+  @apply flex min-h-9 items-center px-3;
+}
+
+.list-toolbar-zone-select {
+  @apply border-b border-slate-200/80 bg-slate-50 md:border-b-0 md:border-r md:border-slate-200/80;
+}
+
+.list-toolbar-zone-filters {
+  @apply border-b border-amber-200/60 bg-amber-50/70 md:border-b-0 md:border-r md:border-amber-200/60;
+}
+
+/* Fila A: fondo único neutro (sin slate vs brand) */
+.list-toolbar-secondary-stable {
+  @apply bg-neutral-50/90;
+}
+
+.list-toolbar-rail-start {
+  @apply flex h-10 shrink-0 items-center gap-2 px-3;
+}
+
+.list-toolbar-rail-start--divided {
+  @apply border-r border-neutral-200/80;
+}
+
+.list-toolbar-rail-middle {
+  @apply flex min-h-10 min-w-0 flex-1 items-center;
+}
+
+/* Rail derecho compartido: Ver detalle e iconos de filtros */
+.list-toolbar-rail-end {
+  @apply flex h-10 w-[7.5rem] shrink-0 items-center justify-end gap-0.5 px-3;
+}
+
+.list-toolbar-rail-end--combined {
+  @apply w-auto min-w-0 gap-0.5 border-l border-neutral-200/70 pl-2;
+}
+
+/* 1 fila: un solo “idioma” visual (neutro + brand en tipografía/acciones) */
+.list-toolbar-secondary-inline .list-toolbar-chip-filter {
+  @apply border-neutral-200/90 bg-white text-neutral-700 shadow-none hover:border-neutral-300 hover:bg-neutral-50;
+}
+
+.list-toolbar-secondary-inline .list-toolbar-chip-filter-label {
+  @apply text-neutral-500;
+}
+
+.list-toolbar-secondary-inline .list-toolbar-chip-remove {
+  @apply text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700;
+}
+
+.list-toolbar-secondary-inline .list-toolbar-chip-more {
+  @apply border-neutral-200 bg-neutral-100/80 text-neutral-700 hover:border-neutral-300 hover:bg-neutral-100;
+}
+
+.list-toolbar-rail-end--combined .list-toolbar-btn-detail {
+  @apply h-7 w-auto border-transparent bg-transparent px-2 font-semibold text-brand-primary shadow-none hover:bg-brand-primary/[0.08];
+}
+
+.list-toolbar-rail-end--combined .list-toolbar-btn-detail-active {
+  @apply border-transparent bg-brand-primary/[0.08];
+}
+
+.list-toolbar-rail-end--combined .list-toolbar-icon-btn {
+  @apply text-neutral-500 hover:bg-neutral-200/70 hover:text-neutral-800;
+}
+
+.list-toolbar-summary-zone {
+  @apply w-full;
+}
+
+/* 1 fila: mismo fondo; un solo divisor (tras selección) */
+.list-toolbar-inline-summary {
+  @apply flex max-w-[min(42%,22rem)] min-w-0 shrink items-center;
+}
+
+.list-toolbar-inline-filters {
+  @apply flex min-h-10 min-w-0 items-center bg-transparent;
+}
+
+.list-toolbar-filters-bar--inline {
+  @apply min-h-10 justify-start;
+}
+
+.list-toolbar-filters-start--inline {
+  @apply flex h-10 min-h-10 min-w-0 items-center gap-1.5 px-2;
+}
+
+.list-toolbar-filters-inline-root {
+  @apply h-full;
+}
+
+/* Fila B full-width: ámbar, padding homologado */
+.list-toolbar-zone-filters-row {
+  @apply w-full border-b-0 border-r-0 md:border-r-0;
+}
+
+.list-toolbar-zone-filters-row--stacked {
+  @apply border-t border-amber-200/60;
+}
+
+.list-toolbar-zone-summary {
+  @apply bg-[rgb(var(--brand-primary-rgb)/0.08)];
+}
+
+.list-toolbar-zone-label {
+  @apply text-xs font-semibold leading-4;
+}
+
+.list-toolbar-zone-label-filters {
+  @apply text-amber-800;
+}
+
+.list-toolbar-filters-badge {
+  @apply inline-flex h-5 items-center rounded-md bg-amber-200/70 px-1.5 text-[11px] font-bold leading-none text-amber-950;
+}
+
+.list-toolbar-filters-bar {
+  @apply flex w-full min-h-10 min-w-0 items-center justify-between gap-2;
+}
+
+.list-toolbar-filters-bar--collapsed {
+  @apply items-center;
+}
+
+.list-toolbar-filters-bar--expanded {
+  @apply items-start;
+}
+
+.list-toolbar-filters-bar--expanded .list-toolbar-rail-end {
+  @apply items-start pt-1.5;
+}
+
+.list-toolbar-filters-start {
+  @apply h-auto min-h-10 min-w-0 shrink gap-2;
+}
+
+.list-toolbar-chips-track {
+  @apply flex min-w-0 items-center gap-1.5;
+}
+
+.list-toolbar-chips-track--collapsed {
+  @apply flex-nowrap overflow-hidden;
+}
+
+.list-toolbar-chips-track--expanded {
+  @apply flex-wrap overflow-visible;
+}
+
+.list-toolbar-chip-more {
+  @apply cursor-pointer border-amber-300/90 bg-amber-100/80 font-semibold text-amber-900 hover:border-amber-400 hover:bg-amber-100;
+}
+
+.list-toolbar-label {
+  @apply text-xs font-semibold leading-4 text-brand-primary;
+}
+
+.list-toolbar-meta {
+  @apply text-xs font-normal leading-4 tabular-nums text-slate-600;
+}
+
+.list-toolbar-summary {
+  @apply text-xs font-normal leading-4 tabular-nums;
+}
+
+.list-toolbar-summary-value {
+  @apply font-semibold text-brand-primary;
+}
+
+.list-toolbar-summary-unit {
+  @apply text-neutral-600;
+}
+
+.list-toolbar-summary-label {
+  @apply text-neutral-500;
+}
+
+.list-toolbar-summary-sep {
+  @apply text-brand-primary/25;
+}
+
+.list-toolbar-chip {
+  @apply inline-flex h-7 max-h-7 items-center gap-1 rounded-md border px-2 text-xs font-normal leading-4 transition-colors;
+}
+
+.list-toolbar-chip-filter {
+  @apply border-amber-200/90 bg-white text-amber-950 shadow-[0_1px_2px_rgba(180,83,9,0.08)] hover:border-amber-300 hover:bg-amber-50;
+}
+
+.list-toolbar-chip-filter-label {
+  @apply mr-1 shrink-0 font-medium text-amber-700;
+}
+
+.list-toolbar-chip-remove {
+  @apply ml-0.5 inline-flex size-4 shrink-0 items-center justify-center rounded-sm text-amber-500/80 transition-colors hover:bg-amber-100 hover:text-amber-900;
+}
+
+.list-toolbar-btn-detail {
+  @apply inline-flex h-7 w-[7rem] shrink-0 items-center justify-center gap-1 rounded-md border border-brand-primary bg-transparent px-2.5 text-xs font-semibold leading-4 text-brand-primary transition-colors hover:bg-brand-primary/[0.06];
+}
+
+.list-toolbar-btn-detail-active {
+  @apply border-brand-primary bg-transparent text-brand-primary hover:bg-brand-primary/[0.08];
+}
+
+.list-toolbar-icon-btn {
+  @apply inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md transition-colors;
+}
+
+.list-toolbar-icon-btn-clear {
+  @apply text-neutral-500 hover:bg-red-50 hover:text-red-600;
+}
+
+.list-toolbar-icon-btn-expand {
+  @apply text-brand-primary hover:bg-brand-primary/15;
+}
+
+.list-toolbar-mobile-icon-btn {
+  display: inline-flex;
+  height: 1.75rem;
+  width: 1.75rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 0;
+  background: transparent;
+  color: rgb(163 163 163);
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.list-toolbar-mobile-icon-btn:active {
+  background-color: rgb(245 245 245);
+  color: rgb(3 94 73);
+}
+
+.list-toolbar-mobile-toolbar-labeled {
+  @apply relative flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-md px-1 py-1 text-[10px] font-semibold leading-none transition-colors active:bg-white;
+}
+
+.list-toolbar-sticky-float {
+  @apply pointer-events-auto overflow-hidden rounded-2xl border border-neutral-200/80 bg-white/95 shadow-[0_4px_24px_rgba(0,0,0,0.10)] backdrop-blur-md supports-[backdrop-filter]:bg-white/90;
+}
+
+.list-toolbar-sticky-float--desktop {
+  @apply border-neutral-200/90 shadow-[0_12px_40px_rgba(0,0,0,0.16),0_4px_14px_rgba(0,0,0,0.08)] ring-1 ring-black/[0.06];
+}
+
+.list-toolbar-list-selection {
+  @apply hidden md:flex md:h-10 md:w-full md:items-center md:gap-2 md:text-xs md:font-medium md:leading-4;
+}
+
+.list-toolbar-list-selection .list-toolbar-label {
+  @apply md:text-xs md:font-semibold md:leading-4 md:text-brand-primary;
+}
+
+.list-toolbar-list-selection .list-toolbar-meta {
+  @apply md:text-xs md:font-normal md:leading-4 md:tabular-nums md:text-slate-600;
+}
+
+.list-toolbar-list-selection .list-toolbar-icon-btn {
+  @apply text-slate-400 hover:bg-slate-200/70 hover:text-brand-primary;
+}
+
+.list-summary-panel-wrap {
+  @apply overflow-hidden;
+}
+
+.list-summary-panel-inner {
+  @apply min-h-0;
+}
+
+.list-summary-panel-enter-active,
+.list-summary-panel-leave-active {
+  overflow: hidden;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.25s ease;
+}
+
+.list-summary-panel-enter-from,
+.list-summary-panel-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+
+.list-summary-panel-enter-to,
+.list-summary-panel-leave-from {
+  max-height: 24rem;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .list-summary-panel-enter-active,
+  .list-summary-panel-leave-active {
+    transition: none;
+  }
+}
+
+.list-toolbar-mobile-summary-zone {
+  @apply bg-neutral-50/90 px-3 py-2.5;
+}
+
+.list-toolbar-mobile-summary-text {
+  @apply text-[11px] font-normal leading-5 tabular-nums text-neutral-700;
+}

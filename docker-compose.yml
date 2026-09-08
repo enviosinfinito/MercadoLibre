@@ -1,0 +1,210 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - .:/var/www/html
+    env_file:
+      - .env
+    environment:
+      APP_ENV: local
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: saas
+      DB_USERNAME: saas
+      DB_PASSWORD: secret
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      QUEUE_CONNECTION: redis
+      CACHE_STORE: redis
+      MAIL_MAILER: smtp
+      MAIL_HOST: mailpit
+      MAIL_PORT: 1025
+      AWS_ACCESS_KEY_ID: minio
+      AWS_SECRET_ACCESS_KEY: minio123
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_BUCKET: saas
+      AWS_ENDPOINT: http://minio:9000
+      AWS_USE_PATH_STYLE_ENDPOINT: "true"
+      # Server-side publish target (browser still uses VITE_REVERB_HOST=localhost:8081).
+      REVERB_HOST: reverb
+      REVERB_PORT: 8080
+      REVERB_SCHEME: http
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks: [saas]
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports: ["${APP_PORT:-8082}:80"]
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on: [app]
+    networks: [saas]
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: saas
+      MYSQL_USER: saas
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: rootsecret
+    # Host port (default 3307) avoids clashing with other local stacks on :3306.
+    ports: ["${FORWARD_DB_PORT:-3307}:3306"]
+    volumes: [mysql_data:/var/lib/mysql]
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      # Local: binlogs were ~9.5GB with the 30-day default. Keep 1 day for crash recovery.
+      - --binlog-expire-logs-seconds=86400
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-prootsecret"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 15s
+    networks: [saas]
+
+  redis:
+    image: redis:7-alpine
+    # Host port (default 6380) avoids clashing with other local stacks on :6379.
+    ports: ["${FORWARD_REDIS_PORT:-6380}:6379"]
+    volumes: [redis_data:/data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+    networks: [saas]
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports: ["1025:1025", "8025:8025"]
+    networks: [saas]
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    ports: ["9000:9000", "9001:9001"]
+    volumes: [minio_data:/data]
+    networks: [saas]
+
+  createbuckets:
+    image: minio/mc:latest
+    depends_on: [minio]
+    entrypoint: >
+      /bin/sh -c "
+      sleep 3;
+      mc alias set local http://minio:9000 minio minio123;
+      mc mb -p local/saas || true;
+      exit 0;
+      "
+    networks: [saas]
+
+  horizon:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    command: php artisan horizon
+    volumes: [.:/var/www/html]
+    env_file:
+      - .env
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: saas
+      DB_USERNAME: saas
+      DB_PASSWORD: secret
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      QUEUE_CONNECTION: redis
+      CACHE_STORE: redis
+      REVERB_HOST: reverb
+      REVERB_PORT: 8080
+      REVERB_SCHEME: http
+    depends_on:
+      app:
+        condition: service_started
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      reverb:
+        condition: service_started
+    stop_signal: SIGTERM
+    stop_grace_period: 90s
+    healthcheck:
+      test: ["CMD", "php", "artisan", "horizon:status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks: [saas]
+    restart: unless-stopped
+
+  reverb:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080
+    ports: ["8081:8080"]
+    volumes: [.:/var/www/html]
+    env_file:
+      - .env
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on: [app, redis]
+    networks: [saas]
+    restart: unless-stopped
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    command: >
+      sh -c "while true; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"
+    volumes: [.:/var/www/html]
+    env_file:
+      - .env
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: saas
+      DB_USERNAME: saas
+      DB_PASSWORD: secret
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on: [app, mysql, redis]
+    networks: [saas]
+    restart: unless-stopped
+
+  node:
+    image: node:22-alpine
+    working_dir: /var/www/html
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports: ["5173:5173"]
+    volumes: [.:/var/www/html]
+    profiles: ["frontend"]
+    networks: [saas]
+
+volumes:
+  mysql_data:
+  redis_data:
+  minio_data:
+
+networks:
+  saas:
+    driver: bridge

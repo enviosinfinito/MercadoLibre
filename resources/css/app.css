@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500;1,9..40,600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 210 20% 98%;
+        --foreground: 215 25% 16%;
+        --card: 0 0% 100%;
+        --card-foreground: 215 25% 16%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 215 25% 16%;
+        --primary: 175 77% 26%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 210 16% 93%;
+        --secondary-foreground: 215 25% 27%;
+        --muted: 210 16% 93%;
+        --muted-foreground: 215 14% 45%;
+        --accent: 175 40% 94%;
+        --accent-foreground: 175 77% 22%;
+        --destructive: 0 72% 51%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 214 20% 88%;
+        --input: 214 20% 88%;
+        --ring: 175 77% 26%;
+        --radius: 0.5rem;
+        --brand: #0f766e;
+        --brand-hover: #0d9488;
+        --brand-muted: #ccfbf1;
+        --slate-50: #f8fafc;
+        --slate-100: #f1f5f9;
+        --slate-200: #e2e8f0;
+        --slate-300: #cbd5e1;
+        --slate-500: #64748b;
+        --slate-700: #334155;
+        --slate-900: #0f172a;
+        --aurora-from: #ecfeff;
+        --aurora-via: #f0fdfa;
+        --aurora-to: #f8fafc;
+        --mist: rgba(15, 118, 110, 0.08);
+        --slide-over-width: 45%;
+        --slide-over-nested-step: 5%;
+        --slide-over-min-width: 30%;
+        --brand-primary: #0f766e;
+        --brand-primary-hover: #0d9488;
+        --brand-primary-rgb: 15 118 110;
+    }
+
+    .layout-slot-padding {
+        @apply px-4 sm:px-6;
+    }
+
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground antialiased;
+        font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    }
+}
+
+@layer utilities {
+    .bg-aurora {
+        background:
+            radial-gradient(ellipse 80% 60% at 20% 10%, rgba(45, 212, 191, 0.22), transparent 55%),
+            radial-gradient(ellipse 70% 50% at 85% 20%, rgba(14, 165, 233, 0.14), transparent 50%),
+            radial-gradient(ellipse 60% 40% at 50% 90%, rgba(15, 118, 110, 0.1), transparent 55%),
+            linear-gradient(180deg, var(--aurora-from), var(--aurora-via) 40%, var(--aurora-to));
+    }
+
+    .bg-mist {
+        background:
+            radial-gradient(circle at 30% 20%, rgba(15, 118, 110, 0.12), transparent 45%),
+            radial-gradient(circle at 80% 60%, rgba(56, 189, 248, 0.1), transparent 40%),
+            #f8fafc;
+    }
+
+    .text-headline {
+        @apply text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl;
+        line-height: 1.08;
+    }
+
+    .text-headline em {
+        @apply font-medium italic text-brand;
+        font-style: italic;
+    }
+
+    .animate-fade-up {
+        animation: fade-up 0.7s ease-out both;
+    }
+
+    .animate-fade-up-delay {
+        animation: fade-up 0.7s ease-out 0.15s both;
+    }
+
+    .animate-live-pulse {
+        animation: live-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes fade-up {
+        from {
+            opacity: 0;
+            transform: translateY(16px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes live-pulse {
+        0%,
+        100% {
+            opacity: 1;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45);
+        }
+        50% {
+            opacity: 0.85;
+            box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+        }
+    }
+}
+
+/* Outside @layer so connection wash beats TableRow hover utilities */
+.conn-row {
+    background: var(--conn-wash);
+    box-shadow: inset 3px 0 0 var(--conn);
+}
+
+.conn-row:hover {
+    background: var(--conn-hover);
+}
